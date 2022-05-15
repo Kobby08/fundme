@@ -17,4 +17,16 @@ contract FundMe {
         AggregatorV3Interface priceFeed = AggregatorV3Interface(0x9326BFA02ADD2366b30bacB125260Af641031331); 
         return priceFeed.version();
     }
+
+
+    function getPrice() external view returns(uint256) {
+        AggregatorV3Interface priceFeed = AggregatorV3Interface(0x9326BFA02ADD2366b30bacB125260Af641031331);
+        ( ,int256 answer,,,) = priceFeed.latestRoundData();
+        return uint256(answer);
+    }
 }
+
+
+    // Tuples in solidity:
+    // (x, y) = (1, 2)
+    // return x; => 1
