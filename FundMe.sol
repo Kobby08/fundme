@@ -7,6 +7,8 @@ import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 contract FundMe {
     mapping(address => uint256) public addressToAmountFunded;
+    address public owner;
+    address[] public donators;
 
     constructor() {
         owner = msg.sender;
@@ -48,11 +50,16 @@ contract FundMe {
     function withdraw() onlyOwner payable public {
         // withdraw only if its the owner
         payable(msg.sender).transfer(address (this).balance);
-    } 
 
+        for(uint256 donatorIndex = 0; donatorIndex < donators.length; donatorIndex++) {
+            address donator = donators[donatorIndex];
+            addressToAmountFunded[donator] = 0;
+        }
+        donators = new address[](0);
+    } 
 }
 
 
-    // Tuples in solidity:
-    // (x, y) = (1, 2)
-    // return x; => 1
+// Tuples in solidity:
+// (x, y) = (1, 2)
+// return x; => 1
