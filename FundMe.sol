@@ -24,6 +24,14 @@ contract FundMe {
         ( ,int256 answer,,,) = priceFeed.latestRoundData();
         return uint256(answer);
     }
+
+     // 1 Gwei == 0.00002037USD: this may vary over time.
+    function getConversionRate(uint256 etherAmount) public view returns(uint256) {
+        uint256 etherPrice = getPrice();
+        uint256 etherAmountInUsd = (etherAmount * etherPrice) / 1000000000000000000;
+        return etherAmountInUsd;
+    }
+
 }
 
 
