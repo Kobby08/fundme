@@ -6,10 +6,14 @@ pragma solidity >=0.6.0 <0.9.0;
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 contract FundMe {
-    mapping(address => uint256) public donators;
+    mapping(address => uint256) public addressToAmountFunded;
     
     function fund() public payable{
-        donators[msg.sender] += msg.value;
+        // minimum of $50
+        uint256 minimumUsd = 50 * 10 ** 18;
+        require(getConversionRate(msg.value) >= minimumUsd, "You need to donate more ETH!");
+        
+       addressToAmountFunded[msg.sender] += msg.value;
     }
 
     function getVersion() external view returns (uint256) {
