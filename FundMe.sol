@@ -7,6 +7,10 @@ import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 contract FundMe {
     mapping(address => uint256) public addressToAmountFunded;
+
+    constructor() {
+        owner = msg.sender;
+    }
     
     function fund() public payable{
         // minimum of $50
@@ -35,6 +39,16 @@ contract FundMe {
         uint256 etherAmountInUsd = (etherAmount * etherPrice) / 1000000000000000000;
         return etherAmountInUsd;
     }
+
+      modifier onlyOwner() {
+        require(msg.sender == owner, "You need to be the admin to withdraw");
+        _;
+    }
+
+    function withdraw() onlyOwner payable public {
+        // withdraw only if its the owner
+        payable(msg.sender).transfer(address (this).balance);
+    } 
 
 }
 
